@@ -93,8 +93,8 @@ class TestStockPickingInvoiceLink(TestSale):
         self.assertEqual(len(self.so.picking_ids), 2,
                          'Sale Stock: number of pickings should be 2')
         pick_2 = self.so.picking_ids.filtered(
-            lambda x: x.picking_type_code == 'outgoing' and
-            x.state in ('confirmed', 'assigned', 'partially_available'))
+            lambda x: x.picking_type_code == 'outgoing'
+            and x.state in ('confirmed', 'assigned', 'partially_available'))
         pick_2.force_assign()
         pick_2.move_line_ids.write({'qty_done': 1})
         pick_2.action_done()
@@ -138,6 +138,60 @@ class TestStockPickingInvoiceLink(TestSale):
         result = pick_1.action_view_invoice()
         self.assertEqual(result['views'][0][1], 'tree')
 
+        # get email template
+        template = self.env.ref(
+            "account.email_template_edi_invoice",
+            False)
+        # filter invoices which have picking ids
+        invoice_ids = self.so.invoice_ids.filtered(
+            lambda invoice_id: invoice_id.picking_ids)
+
+        # testing default values for the settings option
+        for invoice_id in invoice_ids:
+            invoice_id.action_invoice_sent()
+        if not self.env['ir.default'].sudo().get(
+                'res.config.settings',
+                'picking_reports_as_email_attachment'):
+            self.assertFalse(template.attachment_ids.filtered(
+                lambda attachment_id:
+                attachment_id == 'stock.picking'))
+        else:
+            self.assertTrue(template.attachment_ids.filtered(
+                lambda attachment_id:
+                attachment_id == 'stock.picking'))
+
+        # assigning values to the setting option
+
+        # set to True
+        self.env['ir.default'].sudo().set(
+            'res.config.settings',
+            'picking_reports_as_email_attachment',
+            True)
+
+        # for each invoice, its number of pickings will be equal
+        #   to the number of reports attached to the email template
+        for invoice_id in invoice_ids:
+            invoice_id.action_invoice_sent()
+            self.assertEqual(
+                len(template.attachment_ids.filtered(
+                    lambda attachment_id:
+                    attachment_id.res_model == 'stock.picking')),
+                len(invoice_id.picking_ids))
+
+        # set to False
+        self.env['ir.default'].sudo().set(
+            'res.config.settings',
+            'picking_reports_as_email_attachment',
+            False)
+
+        # as there has to be no picking report,
+        #   we only test if the value is false
+        for invoice_id in invoice_ids:
+            invoice_id.action_invoice_sent()
+        self.assertFalse(
+            template.attachment_ids.filtered(
+                lambda attachment_id:
+                attachment_id.res_model == 'stock.picking'))
         # Cancel invoice and invoice
         inv_1.action_cancel()
         self.so.action_invoice_create()
@@ -227,3 +281,57 @@ class TestStockPickingInvoiceLink(TestSale):
             lambda l: l.product_id == self.prod_del)
         self.assertEqual(move_line_prod_del,
                          inv_line_refund_prod_del.move_line_ids)
+        # get email template
+        template = self.env.ref(
+            "account.email_template_edi_invoice",
+            False)
+        # filter invoices which have picking ids
+        invoice_ids = self.so.invoice_ids.filtered(
+            lambda invoice_id: invoice_id.picking_ids)
+
+        # testing default values for the settings option
+        for invoice_id in invoice_ids:
+            invoice_id.action_invoice_sent()
+        if not self.env['ir.default'].sudo().get(
+                'res.config.settings',
+                'picking_reports_as_email_attachment'):
+            self.assertFalse(template.attachment_ids.filtered(
+                lambda attachment_id:
+                attachment_id == 'stock.picking'))
+        else:
+            self.assertTrue(template.attachment_ids.filtered(
+                lambda attachment_id:
+                attachment_id == 'stock.picking'))
+
+        # assigning values to the setting option
+
+        # set to True
+        self.env['ir.default'].sudo().set(
+            'res.config.settings',
+            'picking_reports_as_email_attachment',
+            True)
+
+        # for each invoice, its number of pickings will be equal
+        #   to the number of reports attached to the email template
+        for invoice_id in invoice_ids:
+            invoice_id.action_invoice_sent()
+            self.assertEqual(
+                len(template.attachment_ids.filtered(
+                    lambda attachment_id:
+                    attachment_id.res_model == 'stock.picking')),
+                len(invoice_id.picking_ids))
+
+        # set to False
+        self.env['ir.default'].sudo().set(
+            'res.config.settings',
+            'picking_reports_as_email_attachment',
+            False)
+
+        # as there has to be no picking report,
+        #   we only test if the value is false
+        for invoice_id in invoice_ids:
+            invoice_id.action_invoice_sent()
+        self.assertFalse(
+            template.attachment_ids.filtered(
+                lambda attachment_id:
+                attachment_id.res_model == 'stock.picking'))
