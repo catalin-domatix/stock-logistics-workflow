@@ -30,6 +30,7 @@ class AccountInvoice(models.Model):
                         result[i][2][name] = [(6, 0, line[name].ids)]
                         line[name] = False
         return result
+
     def action_invoice_sent(self):
         self.ensure_one()
 
