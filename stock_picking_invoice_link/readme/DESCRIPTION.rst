@@ -1,5 +1,5 @@
 This module adds a link between pickings and invoices as well as on the lines.
-Invoices are generated from sales orders. With this module you can find back
+Invoices are generated from sales orders. With this module, you can find back
 which deliveries an invoice relates to.
 
 In standard, if you make a partial delivery and invoice it, then make remaining

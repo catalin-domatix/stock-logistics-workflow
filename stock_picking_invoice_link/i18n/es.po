@@ -101,10 +101,8 @@ msgstr "Transferir"
 msgid "You can not modify an invoiced stock move"
 msgstr "No puede modificar un movimiento de almacén facturado"
 
-<<<<<<< HEAD
 #~ msgid "Invoice Lines"
 #~ msgstr "Líneas de factura"
-
 
 #. module: stock_picking_invoice_link
 #: model:ir.ui.view,arch_db:stock_picking_invoice_link.res_config_settings_view_form_inherit
@@ -116,7 +114,6 @@ msgstr "Informes de Trasnferencias como adjuntos en correos electrónicos"
 msgid "Set Picking Operations reports as attachments to the email created by the `Send by Email` button."
 msgstr "Informes de Transferencias como adjuntos en el email creado por "
 "el botón `Enviar por correo electrónico`"
-=======
 #~ msgid "View Invoice"
 #~ msgstr "Ver factura"
->>>>>>> ac358818ec4a3028c1951802c12ad6e6954e0133
+
