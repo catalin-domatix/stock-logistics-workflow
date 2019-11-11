@@ -20,7 +20,7 @@
   * David Vidal <david.vidal@tecnativa.com>
 * `Domatix <https://www.domatix.com>`_
 
-  * Catalin Airimitoaie <catalin@domaitx.com>
+  * Catalin Airimitoaie <catalin@domatix.com>
 * Unai Alkorta
 * Iñaki Zabala
 * Jacques-Etienne Baudoux <je@bcim.be>

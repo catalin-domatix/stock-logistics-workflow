@@ -117,4 +117,3 @@ msgstr "Informes de Trasnferencias como adjuntos en correos electrónicos"
 msgid "Set Picking Operations reports as attachments to the email created by the `Send by Email` button."
 msgstr "Informes de Transferencias como adjuntos en el email creado por "
 "el botón `Enviar por correo electrónico`"
-
